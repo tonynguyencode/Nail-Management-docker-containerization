@@ -1,0 +1,32 @@
+.App {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  background-color: aliceblue;
+  width: 100%;
+   /* optional, ensures full-height layout */
+}
+
+/* If you want your sidebar to have a fixed width, 
+   you can add a class to <DefaultSidebar /> 
+   or just style it within its own component CSS. */
+/* Example:
+.DefaultSidebar {
+  width: 250px;
+  background-color: #f2f2f2;
+  border-right: 1px solid #ccc;
+}
+*/
+
+.sideBar {
+   display: flex;
+   align-items: stretch;
+   padding: 25px;
+}
+ 
+/* Make .main-content take up the remaining space */
+.main-content {
+  flex-grow: 1;
+  width: 100%;
+  overflow-y: auto;
+}

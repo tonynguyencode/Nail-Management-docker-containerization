@@ -13,7 +13,7 @@ import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import { StyledEngineProvider } from '@mui/material/styles';
 import AddTechnicianPage from './MainContent/Technician/technicianForm';
-import AdminDashBoard from './AdminContent/LoginPage';
+import AdminDashBoardLogin from './AdminContent/LoginPage';
 
 
 const App = () =>  {
@@ -38,7 +38,7 @@ const App = () =>  {
               <Link to="/technician" className='nav-link'><p>Technician</p></Link>
               <Link to="/appointment" className='nav-link'><p>Appointment</p></Link>
 
-              <Link to="/adminDashboard" className='nav-link'>
+              <Link to="/adminDashboardLogin" className='nav-link'>
                  <SupervisorAccountIcon style={{color:"white", fontSize: "36px", marginBottom: "10px"}} />
               </Link>
 
@@ -62,11 +62,11 @@ const App = () =>  {
 
           <Route path="/signup" element={<SignUpPage />} />
 
-          <Route path="/technician" element={<AddTechnicianPage/>} />
+          <Route path="/technician"  />
 
           <Route path="/appointment" element={<Appointment />} />
 
-          <Route path="/adminDashboard" element={<AdminDashBoard />} />
+          <Route path="/adminDashboardLogin" element={<AdminDashBoardLogin />} />
 
         </Routes>
 

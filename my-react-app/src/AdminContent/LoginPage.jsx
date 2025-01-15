@@ -8,7 +8,7 @@ import {Col, Row, Form, Card, FormCheck, Container, InputGroup, Button} from '@t
 import {Link} from 'react-router-dom';
  
 import BgImage from "../assets/img/illustrations/signin.svg";
-
+import '../scss/volt.scss';
 
 export default () => {
     return (
