@@ -9,16 +9,16 @@ import {CSSTransition} from 'react-transition-group';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Nav, Badge, Image, Button, Dropdown, Accordion, Navbar } from '@themesberg/react-bootstrap';
 
-import { DefaultSidebar } from './components/SideBar/Sidebar';
+
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
-import MyPage from './components/AppointmentBar/AppointmentBar';
+
 import { styled } from '@mui/material';
 import { WidthFull } from '@mui/icons-material';
 
+import {Box, Stack} from '@mui/material';
 
-
-
-
+import DefaultSidebar from './components/SideBar/Sidebar';
+import MyPage from './components/AppointmentBar/AppointmentBar';
 
 
 
@@ -32,26 +32,46 @@ function App() {
     
       <BrowserRouter>
 
-        <div className="App">
-
+        <Stack 
+        direction="row"
+        sx={{
+          width: '100%',  //full width of the screen
+          height: '100vh',  // full height of the viewport
           
-          <DefaultSidebar />
-          
-          
+        }}
+        >
 
-          {/* Main content: USING  */}
-          <main className="main-content">
+          {/* Side Bar child */}
+          <Box
+            sx={{
+              width: 350,           // Fixed sidebar width
+              flexShrink: 0,        // do not shrink below 250px
+              backgroundColor: 'lightgray',
+            }}
+          >
+            <DefaultSidebar />
 
-            <Routes>
-              <Route path="/" element={<MyPage />} />
-            </Routes>
-              
-          </main>
+          </Box>
 
+
+          {/* Main Content area */}
+          <Box
+            sx={{
+              flexGrow: 1,    //takes up remaining space
+              backgroundColor: 'aliceblue',
+              p: 2,
+              width: '100%',
+              height: '100vh',
+            }}
+          >
+            <MyPage />
           
+          </Box>
 
-          
-        </div>
+
+
+        </Stack>
+        
 
 
       </BrowserRouter>

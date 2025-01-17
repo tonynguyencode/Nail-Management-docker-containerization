@@ -170,11 +170,7 @@ function createData(name, calories, fat, carbs, protein, price) {
     return (
      <Box
      sx={{
-          height: '100vh', //Full height of the view port
-          width: '100vh',
-          padding: 2,
-          
-          
+               
      }}
      
      >

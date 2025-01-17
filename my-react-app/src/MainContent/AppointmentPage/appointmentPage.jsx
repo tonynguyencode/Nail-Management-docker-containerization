@@ -98,7 +98,7 @@ function App() {
         
 
         //Try to make the request now
-        const response = await fetch("http://localhost:8080/api/appointment/schedule", {
+        const response = await fetch("/api/appointment/schedule", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
