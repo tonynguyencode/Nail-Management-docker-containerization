@@ -1,6 +1,8 @@
 package com.nailclinic.managementnailclinic.EntityServices;
 
+import com.nailclinic.managementnailclinic.Entities.Role;
 import com.nailclinic.managementnailclinic.Entities.User;
+import com.nailclinic.managementnailclinic.Repositories.UserRepository.RoleRepository;
 import com.nailclinic.managementnailclinic.Repositories.UserRepository.UserBasicRepository;
 import com.nailclinic.managementnailclinic.apiDtos.LoginUserDto;
 import com.nailclinic.managementnailclinic.apiDtos.RegisterUserDto;
@@ -10,7 +12,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class AuthenticationService {
@@ -20,10 +25,13 @@ public class AuthenticationService {
 
     private final AuthenticationManager authenticationManager;
 
-    public AuthenticationService(UserBasicRepository userBasicRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager) {
+    private final RoleRepository roleRepository;
+
+    public AuthenticationService(UserBasicRepository userBasicRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, RoleRepository roleRepository) {
         this.userBasicRepository = userBasicRepository;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
+        this.roleRepository = roleRepository;
     }
 
     @Transactional
@@ -33,6 +41,12 @@ public class AuthenticationService {
         user.setPassword(passwordEncoder.encode(input.getPassword()));
         user.setFullName(input.getFullName());
         user.setPhoneNumber(input.getPhoneNumber());
+        Set<String> roles_name = new HashSet<>();
+        roles_name.add("USER");
+        Set<Role> roles = roles_name.stream()
+                .map(roleRepository::findRoleByName)
+                .collect(Collectors.toSet());
+        user.setRoles(roles);
         return userBasicRepository.save(user);
     }
 

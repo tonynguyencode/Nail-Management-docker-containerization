@@ -1,4 +1,4 @@
-import logo from './logo.svg';
+
 import './App.css';
 
 
@@ -8,15 +8,19 @@ import Icon from './assets/MyIcon';
 import SignUpPage from './MainContent/SignUpForm/signup';
 import Appointment from './MainContent/AppointmentPage/appointmentPage';
 import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
+import ProfilePage from './MainContent/LoginForm/ProfilePage';
 
-
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Link, Navigate, useNavigate } from 'react-router-dom';
 import { StyledEngineProvider } from '@mui/material/styles';
-import AddTechnicianPage from './MainContent/Technician/technicianForm';
+
 import AdminDashBoardLogin from './AdminContent/LoginPage';
 
 
+import ProtectedRoute from './ProtectedRoute';
+
 const App = () =>  {
+
+
   return (
   
   <BrowserRouter>
@@ -42,7 +46,7 @@ const App = () =>  {
                  <SupervisorAccountIcon style={{color:"white", fontSize: "36px", marginBottom: "10px"}} />
               </Link>
 
-              <Link to="/login" className='nav-link'>
+              <Link to="/profile" className='nav-link'>
                   <Icon />
               </Link>
             </nav>
@@ -58,11 +62,21 @@ const App = () =>  {
 
           <Route path="/home" element={<HomeBody />} />
 
-          <Route path="/login" element={<LoginPage />} />
+          <Route path="/login" element={<LoginPage /> } />
+
+          
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                 <ProfilePage />
+              </ProtectedRoute>
+            }
+
+          />
 
           <Route path="/signup" element={<SignUpPage />} />
 
-          <Route path="/technician"  />
 
           <Route path="/appointment" element={<Appointment />} />
 
@@ -80,7 +94,7 @@ const App = () =>  {
 
     </div>
 
-   
+    
   </BrowserRouter>
   
   );

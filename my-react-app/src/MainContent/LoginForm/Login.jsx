@@ -1,5 +1,6 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import './loginStyles.css';
+
 
 import {
 	MDBBtn,
@@ -17,11 +18,13 @@ import {
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import App from '../SignUpForm/signup';
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from '../../AuthContext';
+
 const LoginPage = () => {
   
   const navigate = useNavigate();
   {/* */}
-
+  const { login } = useContext(AuthContext);
   {/* Initial User State */}
   const[user, setUser] = useState({
     username: "", password:""
@@ -58,7 +61,8 @@ const LoginPage = () => {
           const data = await response.json();
           localStorage.setItem('authToken', data.token);
           localStorage.setItem('tokenExpiration', data.expiresIn);
-          alert("You have successful log in");
+          login(data.token);
+          alert("You have successful log in.");
           navigate("/home");
         }
 
@@ -82,7 +86,7 @@ const LoginPage = () => {
         <MDBRow className='g-0'>
 
           <MDBCol md='6'>
-            <MDBCardImage src='https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/img1.webp' alt="login form" className='rounded-start w-100'/>
+            <MDBCardImage src='/login-Card.jpg' alt="login form" className='rounded-start w-100'/>
           </MDBCol>
 
           <MDBCol md='6'>

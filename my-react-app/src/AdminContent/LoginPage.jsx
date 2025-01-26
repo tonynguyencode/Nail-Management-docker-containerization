@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faAngleLeft, faEnvelope, faUnlockAlt} from "@fortawesome/free-solid-svg-icons";
@@ -11,6 +11,9 @@ import BgImage from "../assets/img/illustrations/signin.svg";
 import '../scss/volt.scss';
 
 export default () => {
+
+
+
     return (
       <main>
         <section className="d-flex align-items-center my-5 mt-lg-6 mb-lg-5">
@@ -33,7 +36,7 @@ export default () => {
                         <InputGroup.Text>
                           <FontAwesomeIcon icon={faEnvelope} />
                         </InputGroup.Text>
-                        <Form.Control autoFocus required type="email" placeholder="example@company.com" />
+                        <Form.Control autoFocus required type="email"  placeholder="example@company.com" />
                       </InputGroup>
                     </Form.Group>
                     <Form.Group>
@@ -43,7 +46,7 @@ export default () => {
                           <InputGroup.Text>
                             <FontAwesomeIcon icon={faUnlockAlt} />
                           </InputGroup.Text>
-                          <Form.Control required type="password" placeholder="Password" />
+                          <Form.Control required type="password"  placeholder="Password" />
                         </InputGroup>
                       </Form.Group>
                       <div className="d-flex justify-content-between align-items-center mb-4">
@@ -54,7 +57,7 @@ export default () => {
                         <Card.Link className="small text-end">Lost password?</Card.Link>
                       </div>
                     </Form.Group>
-                    <Button variant="primary" type="submit" className="w-100">
+                    <Button variant="primary" type="submit" className="w-100" >
                       Sign in
                     </Button>
                   </Form>

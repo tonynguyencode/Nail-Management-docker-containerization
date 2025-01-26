@@ -4,16 +4,20 @@ package com.nailclinic.managementnailclinic.Entities;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.GrantedAuthority;
 
-import java.util.Date;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import com.nailclinic.managementnailclinic.Entities.Role;
 
 @Table
 @Entity
 public class User implements UserDetails {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
@@ -39,10 +43,25 @@ public class User implements UserDetails {
     @Column(name = "updated_at")
     private Date updatedAt;
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "user_roles",
+               joinColumns = @JoinColumn(name = "user_id"),
+               inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<Role> roles = new HashSet<>();
 
-    {/* Override Methods*/}
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        return this.getRoles().stream().map(role -> new SimpleGrantedAuthority( "ROLE_" + role.getName())).collect(Collectors.toList());
+
     }
 
     @Override

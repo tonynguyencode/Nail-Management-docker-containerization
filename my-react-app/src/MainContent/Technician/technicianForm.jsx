@@ -33,14 +33,15 @@ const AddTechnicianPage = () => {
     {/* Adding Technician Function */}
     const addTechnician = async () => {
         try {
+          const nameTech = "Flower";
+
           const token = localStorage.getItem('authToken');
-          const response = await fetch("http://localhost:8080/technician/addTechnician", {
-            method: "POST",
+          const response = await fetch(`/api/appointment/getTechAppointments?technician_name=${encodeURIComponent(nameTech)}`, {
+            method: "GET",
             headers: {
-              "Authorization" : `Bearer ${token}`,
-              "Content-Type" : "application/json",
+              "Authorization" : `Bearer ${token}`,  
             },
-            body: JSON.stringify(user),
+            
           });
 
           if(!response.ok){
@@ -50,9 +51,9 @@ const AddTechnicianPage = () => {
             throw new Error(`Failed to save the technician: ${response.status} - ${errorText}`);
           } else {
             // response is 200 OK
-            const responseText = await response.text();
-            console.log("Successful" + responseText);
-
+            const responseText = await response.json();
+            console.log(responseText);
+            
           }
 
 

@@ -12,9 +12,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+//Using HTTPOnly Cookie
+
+
 @RequestMapping(path = "/auth")
 @RestController
-@CrossOrigin(origins = "http://localhost")
 public class AuthenticationController {
 
     private static final Logger log = LoggerFactory.getLogger(AuthenticationController.class);
@@ -41,8 +43,10 @@ public class AuthenticationController {
         LoginResponse loginResponse = new LoginResponse();
         loginResponse.setToken(jwtToken);
         loginResponse.setExpiresIn(jwtService.getExpirationTime());
-
+        loginResponse.setRoles(authenticatedUser.getRoles());
         return ResponseEntity.ok(loginResponse);
     }
+
+
 
 }

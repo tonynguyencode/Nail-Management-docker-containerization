@@ -29,14 +29,13 @@ function App() {
 
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
+
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
     setOpen(false);
     navigate("/home");
   }
   
-  
-
  
 
   const ITEM_HEIGHT = 48;
@@ -87,7 +86,7 @@ function App() {
       if(formData.date && formData.time){
         const localDateTime = `${formData.date}T${formData.time}:00`; //Combine date and time into ISO 8601
 
-        console.log(localDateTime);
+        
         const appointmentRegisterDto = {
           appointmentTime: localDateTime,
           status: "SCHEDULED",
@@ -222,7 +221,7 @@ function App() {
 
               
             </MDBCardBody>
-          </MDBCard>
+          </MDBCard>  
 
         </MDBCol>
       </MDBRow>

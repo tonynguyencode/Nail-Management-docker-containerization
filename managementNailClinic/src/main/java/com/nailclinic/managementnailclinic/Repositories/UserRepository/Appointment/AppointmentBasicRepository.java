@@ -9,4 +9,5 @@ public interface AppointmentBasicRepository extends CrudRepository<Appointment, 
 
 
 
+
 }
