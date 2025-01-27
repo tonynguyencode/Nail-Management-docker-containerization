@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { MDBCol, MDBContainer, MDBRow, MDBCard, MDBCardText, MDBCardBody, MDBCardImage, MDBTypography, MDBIcon } from 'mdb-react-ui-kit';
 import './profileStyles.css';
-import { AuthContext } from '../../AuthContext';
+import {AuthContext} from '../../AuthContext';
 
 
   
@@ -9,7 +9,8 @@ import { AuthContext } from '../../AuthContext';
 function Profile(){
     const [profile, setProfile] = useState(null);
     const [error, setError] = useState(null);    
-    const {token, logout} = useContext(AuthContext);
+    const {isAuthenticated, logout} = useContext(AuthContext);
+    
 
     useEffect( () => {
         const fetchProfile = async () => {
@@ -24,19 +25,18 @@ function Profile(){
             if(response.ok){
                 const data = await response.json();
                 setProfile(data);
-                console.log(data);
-            } else if(response.status === 401){
-                logout();
-                setError('Unauthorized access. Logging out.');
-            } 
-            else {
-                //For non-OK response, capture error details
-                console.error('Failed to fetch profile');
+            } else {
+              const errorText = await response.json();
+              const errorMessage = errorText.message || JSON.stringify(errorText);
+              alert(`Failed to load your data: ${response.status} - ${errorText}`);
+              throw new Error(`Failed to load your data: ${response.status} - ${errorText}`);
             }
 
         };
         
-        fetchProfile();
+        if(isAuthenticated){
+          fetchProfile();
+        }
         
     }, []);
 

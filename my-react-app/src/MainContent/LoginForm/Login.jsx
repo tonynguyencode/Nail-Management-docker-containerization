@@ -1,6 +1,7 @@
 import React, {useContext, useState} from 'react';
 import './loginStyles.css';
-
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from '../../AuthContext';
 
 import {
 	MDBBtn,
@@ -17,8 +18,7 @@ import {
 
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import App from '../SignUpForm/signup';
-import { useNavigate } from "react-router-dom";
-import { AuthContext } from '../../AuthContext';
+
 
 const LoginPage = () => {
   
@@ -55,11 +55,10 @@ const LoginPage = () => {
         if(!response.ok){
           //Log the response status and message.
           const errorText = await response.json();
-          const errorMessage = errorText.message || JSON.stringify(errorText)
+          const errorMessage = errorText.message || JSON.stringify(errorText);
           throw new Error(`Failed to save the technician: ${response.status} - ${errorText}`);
         } else {
           const data = await response.json();
-          localStorage.setItem('authToken', data.token);
           localStorage.setItem('tokenExpiration', data.expiresIn);
           login(data.token);
           alert("You have successful log in.");

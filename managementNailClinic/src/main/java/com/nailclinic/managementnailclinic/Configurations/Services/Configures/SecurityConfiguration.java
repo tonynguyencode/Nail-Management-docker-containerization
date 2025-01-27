@@ -38,10 +38,9 @@ public class SecurityConfiguration {
                 .cors().configurationSource(corsConfigurationSource())
                 .and()
                 .authorizeHttpRequests()
-                .requestMatchers("/auth/**", "/api/users/**" ).permitAll()
+                .requestMatchers("/auth/**" ).permitAll()
                 //Define role-based access
-                .requestMatchers( "/api/appointment/**").hasAnyRole("USER", "ADMIN")
-                .requestMatchers("/api/admin/**", "/ws/**").hasAnyRole("ADMIN", "USER")
+                .requestMatchers( "/api/appointment/**", "/api/admin/**", "/ws/**", "/api/users/**").hasAnyRole("USER", "ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement()

@@ -1,41 +1,41 @@
-import React, {createContext, useState, useEffect} from 'react';
+import React, {createContext, useState, useEffect, useContext} from 'react';
 
 // Create a context with default values
-export const AuthContext = createContext({
-    isAuthenticated: false,
-    token: null,
-    login: () => {},
-    logout: () => {},
-});
+export const AuthContext = createContext();
+    
 
 
 export const AuthProvider = ({children}) => {
-    const [token, setToken] = useState( () => localStorage.getItem('authToken') );
 
-    // Check foor existing token in storage on mount
+    //We just create a Global isAuthenticated so we can use in many places.
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+
     useEffect( () => {
-        const storedToken = localStorage.getItem('authToken');
-        if(storedToken){
-            setToken(storedToken);
+        // Check authentication status on mount
+        const token = localStorage.getItem('authToken');
+        
+        if(token){
+            setIsAuthenticated(true);
         }
+    }, []);
 
-    }, [token]);
 
-    const login = (newToken) => {
-        setToken(newToken);
-        localStorage.setItem('authToken', newToken); //Persist token if desired
-    };
+    // Two Global Functions to work with
+    const login = (token) => {
+        //Received a token and set the token
+        localStorage.setItem('authToken', token);
+        
+    }
 
     const logout = () => {
-        setToken(null);
         localStorage.removeItem('authToken');
-    };
-
-    const isAuthenticated = !!token;
+        setIsAuthenticated(false);
+    }
 
     return (
-        <AuthContext.Provider value={{isAuthenticated, token, login, logout}}>
+        <AuthContext.Provider value={{isAuthenticated, login, logout}}>
             {children}
         </AuthContext.Provider>
     );
 };
+
