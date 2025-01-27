@@ -2,7 +2,7 @@
 
 ## Nail Clinic Management Frontend
 This repository contains a nail clinic frontend application built with React and Spring Security. This project focuses on building a basic and user-friendly interface for the customer and management of a nail salon.
-[Link Text](http://142.93.0.198/home)
+[Website](http://142.93.0.198/)
 
 
 ## Feature
