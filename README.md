@@ -1,9 +1,11 @@
 # Nail-Management-Full Stack
 
 ## Nail Clinic Management Frontend
-This repository contains a nail clinic frontend application built with React and Spring Security. This project focuses on building a basic and user-friendly interface for the customer and management of a nail salon.
+This repository contains a nail clinic full-stack application built with React and Spring Boot. This project focuses on building a basic and user-friendly interface for the customer and management of a nail salon.
+[Website](http://142.93.0.198/)
 
-## Feature
+
+## Feature wih React + Vite.
 Customer:
   - Sign-up an account with email address, full name, and phone number.
   - An customer can request an appointment via the appointment page with their choice of technician.
@@ -34,6 +36,7 @@ Scheduling an Appointment:
 
 Framework:
   - Built with Spring Boot and Spring Security.
+  - React, and Vite + React for Frontend.
   - Use Java, Maven, MySQL, Docker, and IntelliJ for Development.
     
 Communication:
@@ -63,7 +66,7 @@ Frontend:
 ![sign-inPage](https://github.com/user-attachments/assets/32a2f1d8-2b3c-40f3-956c-113cdbcbe2c2)
 
 
-# Backend
+# Backend nailManagementClinic.
 This repository contains the application backend built with Spring Boot and Spring Security, following the agile architecture. The project involves developing RESTful API endpoints to provide services for the Nail-Clinic-Management frontend application.
 
 ## Features
