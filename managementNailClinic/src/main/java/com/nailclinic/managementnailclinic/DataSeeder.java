@@ -24,13 +24,11 @@ public class DataSeeder implements CommandLineRunner {
         if(!roleRepository.existsById(1)){
             Role role = new Role();
             role.setName("USER");
-            role.setId(1);
             roleRepository.save(role);
         }
         if(!roleRepository.existsById(2)){
             Role role = new Role();
             role.setName("ADMIN");
-            role.setId(2);
             roleRepository.save(role);
         }
 
