@@ -24,7 +24,7 @@ export const AuthProvider = ({children}) => {
     const login = (token) => {
         //Received a token and set the token
         localStorage.setItem('authToken', token);
-        
+        setIsAuthenticated(true);
     }
 
     const logout = () => {
@@ -32,6 +32,7 @@ export const AuthProvider = ({children}) => {
         setIsAuthenticated(false);
     }
 
+   
     return (
         <AuthContext.Provider value={{isAuthenticated, login, logout}}>
             {children}

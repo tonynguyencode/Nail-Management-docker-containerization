@@ -14,7 +14,8 @@ function Profile(){
 
     useEffect( () => {
         const fetchProfile = async () => {
-            const response = await fetch('/users/me',{
+            const token = localStorage.getItem('authToken');
+            const response = await fetch('/api/users/me',{
                     method: "GET",
                     headers: {
                         'Content-Type': 'application/json',

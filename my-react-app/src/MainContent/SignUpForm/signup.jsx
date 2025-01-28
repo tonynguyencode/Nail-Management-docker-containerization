@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import './signUpStyles.css';
+import { AuthContext } from '../../AuthContext';
 
 import {
   MDBBtn,
@@ -17,7 +18,7 @@ import { useNavigate } from "react-router-dom";
 
 function App() {
   const navigate = useNavigate();
-
+  
   {/*
     Initial user State: {name: "", username: "", password:"", phoneNumber:"" }
     
@@ -58,13 +59,12 @@ function App() {
   {/* saveUser function
     
     */}
-    const token = localStorage.getItem("authToken");
+    
 
     const saveUser = async () => {
-
-
+      
       try {
-        const response = await fetch("/auth/signup", {
+        const response = await fetch('/auth/signup', {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -102,10 +102,10 @@ function App() {
         
         <MDBCol col='6' className='custom-column'>
 
-          <MDBCard className="my-5 cascading-right custom-card" >
+          <MDBCard className="my-5 cascading-right custom-card">
             <MDBCardBody className='p-5 shadow-5 text-center'>
 
-              <h2 className="fw-bold mb-5" style={{color:'rgb(224, 227, 230)'}}>Sign up now</h2>
+              <h2 className="fw-bold mb-5" style={{color:'rgb(104, 104, 104)'}}>Sign up now</h2>
 
               <MDBRow>
                 <MDBCol col='6'>

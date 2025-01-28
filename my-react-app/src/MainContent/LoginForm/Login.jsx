@@ -61,6 +61,7 @@ const LoginPage = () => {
           const data = await response.json();
           localStorage.setItem('tokenExpiration', data.expiresIn);
           login(data.token);
+          console.log(data);
           alert("You have successful log in.");
           navigate("/home");
         }
