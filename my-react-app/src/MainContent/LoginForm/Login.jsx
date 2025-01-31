@@ -15,6 +15,8 @@ import {
 	MDBInput
   }
   from 'mdb-react-ui-kit';
+import {Modal,Box, Button} from '@mui/material';
+
 
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import App from '../SignUpForm/signup';
@@ -29,6 +31,27 @@ const LoginPage = () => {
   const[user, setUser] = useState({
     username: "", password:""
   });
+
+  {/*Modal State for Successful attempt*/}
+  const [open, setOpen] = useState(false);
+  const [errorOpen, setErrorOpen] = useState(false);
+
+  {/*Modal Functions: handleOPen and handleClose*/}
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => {
+    setOpen(false);
+    navigate("/home");
+  }
+
+  const [errorText, setErrorText] = useState("");
+
+  const handleErrorOpen = (message) => {
+    setErrorText(message);
+    setErrorOpen(true);
+  }
+  const handleErrorClose = () => {
+    setErrorOpen(false);
+  }
 
 
   {/* handle Input Change */}
@@ -55,15 +78,13 @@ const LoginPage = () => {
         if(!response.ok){
           //Log the response status and message.
           const errorText = await response.json();
-          const errorMessage = errorText.message || JSON.stringify(errorText);
-          throw new Error(`Failed to save the technician: ${response.status} - ${errorText}`);
+          const errorMessage = errorText.message;
+          handleErrorOpen(errorMessage);
         } else {
           const data = await response.json();
           localStorage.setItem('tokenExpiration', data.expiresIn);
           login(data.token);
-          console.log(data);
-          alert("You have successful log in.");
-          navigate("/home");
+          handleOpen();
         }
 
         
@@ -114,6 +135,59 @@ const LoginPage = () => {
                 <a href="#!" className="small text-muted me-1">Terms of use.</a>
                 <a href="#!" className="small text-muted">Privacy policy</a>
               </div>
+
+            <Modal
+              open={open}
+              onClose={handleClose}
+              aria-labelledby="modal-title"
+              aria-describedby="modal-description"
+            >
+                <Box
+                 sx={{
+                position: 'absolute',
+                 top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                 width: 400,
+                bgcolor: 'background.paper',
+                border: '2px solid #000',
+                boxShadow: 24,
+                p: 4,
+              }}
+            >
+                <h2 id="modal-title">Log In Successfully.</h2>
+                <p id="modal-description">You will be directing to Home</p>
+                <Button onClick={handleClose} variant="contained" color="secondary">Close</Button>
+
+            </Box>
+          </Modal>
+
+          <Modal
+              open={errorOpen}
+              onClose={handleErrorClose}
+              aria-labelledby="modal-title"
+              aria-describedby="modal-description"
+            >
+                <Box
+                 sx={{
+                position: 'absolute',
+                 top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                 width: 400,
+                bgcolor: 'background.paper',
+                border: '2px solid #000',
+                boxShadow: 24,
+                p: 4,
+              }}
+            >
+                <h2 id="modal-title">Invalid</h2>
+                <p id="modal-description">{errorText}</p>
+                <Button onClick={handleErrorClose} variant="contained" color="secondary">Close</Button>
+
+            </Box>
+          </Modal>
+
 
             </MDBCardBody>
           </MDBCol>
