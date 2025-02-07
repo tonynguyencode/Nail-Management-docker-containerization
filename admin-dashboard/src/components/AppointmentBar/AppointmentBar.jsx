@@ -17,11 +17,13 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 
 import '@fontsource/roboto/700.css';
-import {createTheme, ThemeProvider} from '@mui/material';
+import {createTheme, TextField, ThemeProvider} from '@mui/material';
 import { useState, useEffect } from "react";
 
 import SockJS from 'sockjs-client';
 import {Client} from '@stomp/stompjs';
+//Forms: Imports
+import DateTimeContainer from './BasicDateTimePicker/DateTimePicker';
 
   
   function Row(props) {
@@ -147,7 +149,7 @@ import {Client} from '@stomp/stompjs';
       async function fetchAppointments() {
         try {
           const promises = technicians.map( (tech) =>
-            fetch(`/api/admin/getTechAppointments?technician_name=${encodeURIComponent(tech.name)}`).then((res) => res.json())  //parses the response into JSON format.
+            fetch(`http://localhost:8080/api/admin/getTechAppointments?technician_name=${encodeURIComponent(tech.name)}`).then((res) => res.json())  //parses the response into JSON format.
           );                                                                         // this results in an array of promises
           const results = await Promise.all(promises);   
           const grouped = technicians.reduce( (acc, tech, index) => {
@@ -174,7 +176,7 @@ import {Client} from '@stomp/stompjs';
       const stompClient = new Client({
         webSocketFactory : () => socket,
         onConnect: () => {
-          stompClient.subscribe('/topic/appointments', (message) => {
+          stompClient.subscribe('http://localhost:8080/topic/appointments', (message) => {
             const updatedorNewAppointment = JSON.parse(message.body);
             setAppointmentsByTech(  (prev) => {
               const techId = updatedorNewAppointment.technician.id; //GET the ID of the new Appointment
@@ -238,13 +240,13 @@ import {Client} from '@stomp/stompjs';
      }}
      
      >
-      <ThemeProvider theme={theme}>
+    <ThemeProvider theme={theme}>
       <TableContainer component={Paper}>
-        <Table aria-label="collapsible table" >
+        <Table aria-label="collapsible table" style={{marginBottom: '40px'}} >
           <TableHead >
             <TableRow>
               <TableCell />
-              <TableCell>Name</TableCell>
+              <TableCell>Technician Name</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -253,7 +255,58 @@ import {Client} from '@stomp/stompjs';
             ))}
           </TableBody>
         </Table>
+
+        {/*  
+        Bottom Part: Manually add an Appointment
+        
+        */}
+        <Box
+        component="form"
+        sx={{ '& .MuiTextField-root': { m: 1, width: '25ch' } }}
+        noValidate
+        autoComplete="off"
+        >
+          <TextField
+            id="fullname-input"
+            label="Full Name"
+            type="text" 
+          />
+          <TextField
+            required
+            id="username-input"
+            label="Email Address"
+            type="email" 
+          />
+          <TextField
+            id="phoneNumber-input"
+            label="Phone Number"
+            type="tel" 
+          />
+          
+          <DateTimeContainer />
+
+          <TextField
+            id="select-technician"
+            select
+            label="Select Technician"
+            helperText="Please select your currency"
+          >
+          </TextField>
+        </Box>
+
+        {/*  THE SECOND BOX: Add Button, Delete Button, Find Button */}  
+        <Box
+        component="form"
+        sx={{ '& .MuiTextField-root': { m: 1, width: '25ch' } }}
+        noValidate
+        autoComplete="off"
+        >
+          
+
+        </Box>
+
       </TableContainer>
+     
       </ThemeProvider>
   </Box>
     );

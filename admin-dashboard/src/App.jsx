@@ -4,8 +4,8 @@ import React from 'react';
 import './App.css'
 import SimpleBar from 'simplebar-react'
 
-
-import {CSSTransition} from 'react-transition-group';
+//Need to uninstall these because we are not using them at all
+import {CSSTransition} from 'react-transition-group';  //Need to uninstall these
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Nav, Badge, Image, Button, Dropdown, Accordion, Navbar } from '@themesberg/react-bootstrap';
 
