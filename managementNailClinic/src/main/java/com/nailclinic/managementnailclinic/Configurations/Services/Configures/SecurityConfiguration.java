@@ -38,9 +38,9 @@ public class SecurityConfiguration {
                 .cors().configurationSource(corsConfigurationSource())
                 .and()
                 .authorizeHttpRequests()
-                .requestMatchers("/auth/**", "/ws/**"  ).permitAll()
+                .requestMatchers("/auth/**", "/ws/**", "/api/admin/**"  ).permitAll()
                 //Define role-based access
-                .requestMatchers( "/api/appointment/**", "/api/users/**", "/api/admin/**").hasAnyRole("USER", "ADMIN")
+                .requestMatchers( "/api/appointment/**", "/api/users/**").hasAnyRole("USER", "ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement()
@@ -57,7 +57,7 @@ public class SecurityConfiguration {
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.setAllowedOrigins(List.of("http://localhost"));
+        configuration.setAllowedOrigins(List.of("http://localhost:5173"));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type", "X-Requested-With"));
         configuration.setAllowCredentials(true);
