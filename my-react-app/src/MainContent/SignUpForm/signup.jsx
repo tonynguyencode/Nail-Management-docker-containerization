@@ -15,6 +15,7 @@ import {
 }
 from 'mdb-react-ui-kit';
 import { useNavigate } from "react-router-dom";
+import { Modal,Box, Button} from '@mui/material';
 
 function App() {
   const navigate = useNavigate();
@@ -39,32 +40,53 @@ function App() {
 
     */}
 
+    const handleSubmit = (e) => {
+      e.preventDefault();
+      if(!isFormValid){
+        alert("Please fill in all details");
+      } else {
+        saveUser();
+      }
+      return;
+    };
+
+
     const handleInputChange = (e) => {
       const {name, value} = e.target;
       setUser({...user, [name]: value})
     };
 
     //Check if any input field is empty
-    const isFormValid = Object.values(user).every((value) => value.trim() !== "");
 
-    const handleSubmit = (e) => {
-      e.preventDefault();
-      if(isFormValid){
-        console.log("Form submitted");
-      } else{
-        alert("Form is incomplete!");
-      }
-    }
+      const isFormValid = Object.values(user).every((value) => value.trim() !== "");
 
-  {/* saveUser function
+       {/*Modal State for Successful attempt*/}
+      const [open, setOpen] = useState(false);
+      const [errorOpen, setErrorOpen] = useState(false);
+
+      const handleOpen = () => setOpen(true);
+      const handleClose = () => {
+        setOpen(false);
+        navigate("/login");
+      };
     
-    */}
+      const [errorText, setErrorText] = useState("");
+    
+      const handleErrorOpen = (message) => {
+        setErrorText(message);
+        setErrorOpen(true);
+      };
+      const handleErrorClose = () => {
+        setErrorOpen(false);
+      };
+
+  
     
 
     const saveUser = async () => {
       
       try {
-        const response = await fetch('/auth/signup', {
+        const response = await fetch('http://localhost:8080/auth/signup', {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -77,11 +99,11 @@ function App() {
           const errorText = await response.json();
           // what if 'errorText' is an object without a 'messsage' property
           // Fix => fallback to plain response text if parsing fails.
-          const errorMessage = errorText.message || JSON.stringify(errorText)
-          throw new Error(`Failed to save user: ${response.status} - ${errorText}`);
+          const errorMessage = errorText.message;
+          handleErrorOpen(errorMessage);
         } else {
           // Navigate to log in and sign in to receive the token
-          navigate("/login");
+          handleOpen();
         }
 
         
@@ -106,28 +128,28 @@ function App() {
             <MDBCardBody className='p-5 shadow-5 text-center'>
 
               <h2 className="fw-bold mb-5" style={{color:'rgb(104, 104, 104)'}}>Sign up now</h2>
-
+              <form onSubmit={handleSubmit} >
               <MDBRow>
                 <MDBCol col='6'>
-                  <MDBInput className='label-text' labelClass='custom-label' wrapperClass='mb-4' label='Full Name' id='form1' type='text' name="fullName" value={user.fullName} onChange={handleInputChange}  />
+                  <MDBInput required className='label-text' labelClass='custom-label' wrapperClass='mb-4' label='Full Name' id='form1' type='text' name="fullName" value={user.fullName} onChange={handleInputChange}  />
                 </MDBCol>
 
                 <MDBCol col='6'>
-                  <MDBInput className='label-text' labelClass='custom-label' wrapperClass='mb-4' label='Phone Number' id='form2' type='tel' name="phoneNumber" value={user.phoneNumber}  onChange={handleInputChange}  />
+                  <MDBInput required className='label-text' labelClass='custom-label' wrapperClass='mb-4' label='Phone Number' id='form2' type='tel' name="phoneNumber" value={user.phoneNumber}  onChange={handleInputChange}  />
                 </MDBCol>
               </MDBRow>
 
-              <MDBInput className='label-text' labelClass='custom-label' wrapperClass='mb-4' label='Email' id='form3' type='email' name="username" value={user.username}  onChange={handleInputChange}   />
-              <MDBInput className='label-text' labelClass='custom-label' wrapperClass='mb-4' label='Password' id='form4' type='password' name="password" value={user.password} onChange={handleInputChange}  />
+              <MDBInput required className='label-text' labelClass='custom-label' wrapperClass='mb-4' label='Email' id='form3' type='email' name="username" value={user.username}  onChange={handleInputChange}   />
+              <MDBInput required className='label-text' labelClass='custom-label' wrapperClass='mb-4' autoComplete='new-password'  label='Password' id='form4' type='password' name="password" value={user.password} onChange={handleInputChange}  />
 
               <div className='d-flex justify-content-center mb-4'>
                 <MDBCheckbox name='flexCheck' value='' id='flexCheckDefault' label='Subscribe to our newsletter' />
               </div>
 
-              <button className='submit-button' onClick={saveUser} size='md'>
+              <button type='submit' className='submit-button' disabled={!isFormValid} onClick={saveUser} size='md'>
                   Sign Up
               </button>
-              
+              </form>
 
               <div className="text-center">
 
@@ -151,6 +173,60 @@ function App() {
 
               </div>
 
+            {/* Modal for the user to see */}
+            <Modal
+              open={open}
+              onClose={handleClose}
+              aria-labelledby="modal-title"
+              aria-describedby="modal-description"
+            >
+                <Box
+                 sx={{
+                position: 'absolute',
+                 top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                 width: 400,
+                bgcolor: 'background.paper',
+                border: '2px solid #000',
+                boxShadow: 24,
+                p: 4,
+              }}
+            >
+                <h2 id="modal-title">Sign Up Successfully.</h2>
+                <p id="modal-description">You will be directing to Login Page</p>
+                <Button onClick={handleClose} variant="contained" color="secondary">Close</Button>
+
+                </Box>
+            </Modal>
+
+            <Modal
+              open={errorOpen}
+              onClose={handleErrorClose}
+              aria-labelledby="modal-title"
+              aria-describedby="modal-description"
+            >
+                <Box
+                 sx={{
+                position: 'absolute',
+                 top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                 width: 400,
+                bgcolor: 'background.paper',
+                border: '2px solid #000',
+                boxShadow: 24,
+                p: 4,
+              }}
+            >
+                <h2 id="modal-title">Invalid</h2>
+                <p id="modal-description">{errorText}</p>
+                <Button onClick={handleErrorClose} variant="contained" color="secondary">Close</Button>
+
+              </Box>
+          </Modal>
+
+
             </MDBCardBody>
           </MDBCard>
         </MDBCol>
@@ -162,6 +238,11 @@ function App() {
         </MDBCol>
 
       </MDBRow>
+
+
+      
+
+        
 
     </MDBContainer>
   );

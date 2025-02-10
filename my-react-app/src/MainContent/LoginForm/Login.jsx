@@ -18,7 +18,7 @@ import {
 import {Modal,Box, Button} from '@mui/material';
 
 
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import App from '../SignUpForm/signup';
 
 
@@ -35,6 +35,15 @@ const LoginPage = () => {
   {/*Modal State for Successful attempt*/}
   const [open, setOpen] = useState(false);
   const [errorOpen, setErrorOpen] = useState(false);
+
+  const isFormValid = Object.values(user).every((value) => value.trim() !== "");
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if(!isFormValid){
+      alert("Please fill in all details");
+    }
+    return;
+  };
 
   {/*Modal Functions: handleOPen and handleClose*/}
   const handleOpen = () => setOpen(true);
@@ -119,11 +128,12 @@ const LoginPage = () => {
               </div>
 
               <h5 className="fw-normal my-4 pb-3" style={{letterSpacing: '1px'}}>Sign into your account</h5>
-
+                <form onSubmit={handleSubmit}>
                 <MDBInput wrapperClass='mb-4' label='Email address' id='formControlLg' type='email' name='username' value={user.username} onChange={handleInputChange} size="lg"/>
                 <MDBInput wrapperClass='mb-4' label='Password' id='formControlLg' type='password' name='password' value={user.password} onChange={handleInputChange}  size="lg"/>
+                </form>
                 
-              <button className='submit-button' onClick={authenticateUser}>
+              <button className='submit-button' onClick={authenticateUser} type='submit'>
                   Login
               </button>
               

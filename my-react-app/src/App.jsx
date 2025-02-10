@@ -3,7 +3,7 @@ import './App.css';
 
 
 import HomeBody from './MainContent/Dashboard/Home';
-import LoginPage from './MainContent/LoginForm/Login';
+
 import Icon from './assets/MyIcon';
 import SignUpPage from './MainContent/SignUpForm/signup';
 import Appointment from './MainContent/AppointmentPage/appointmentPage';
@@ -13,7 +13,7 @@ import ProfilePage from './MainContent/LoginForm/ProfilePage';
 import { BrowserRouter, Routes, Route, Link, Navigate, useNavigate } from 'react-router-dom';
 import { StyledEngineProvider } from '@mui/material/styles';
 
-import AdminDashBoardLogin from './AdminContent/LoginPage';
+import DashBoardLogin from './AdminContent/LoginPage';
 
 
 import ProtectedRoute from './ProtectedRoute';
@@ -39,10 +39,10 @@ const App = () =>  {
         <div>
             <nav className='navbar'>
               <Link to="/home" className='nav-link'><p>Home</p></Link>
-              <Link to="/technician" className='nav-link'><p>Technician</p></Link>
+              
               <Link to="/appointment" className='nav-link'><p>Appointment</p></Link>
 
-              <Link to="/adminDashboardLogin" className='nav-link'>
+              <Link to="" className='nav-link'>
                  <SupervisorAccountIcon style={{color:"white", fontSize: "36px", marginBottom: "10px"}} />
               </Link>
 
@@ -62,7 +62,7 @@ const App = () =>  {
 
           <Route path="/home" element={<HomeBody />} />
 
-          <Route path="/login" element={<LoginPage /> } />
+          <Route path="/login" element={<DashBoardLogin /> } />
 
           
           <Route
@@ -80,7 +80,7 @@ const App = () =>  {
 
           <Route path="/appointment" element={<Appointment />} />
 
-          <Route path="/adminDashboardLogin" element={<AdminDashBoardLogin />} />
+          
 
         </Routes>
 
