@@ -86,7 +86,7 @@ function App() {
     const saveUser = async () => {
       
       try {
-        const response = await fetch('http://localhost:8080/auth/signup', {
+        const response = await fetch('/auth/signup', {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
