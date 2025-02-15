@@ -7,6 +7,8 @@ import com.nailclinic.managementnailclinic.Repositories.UserRepository.Appointme
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 
@@ -40,4 +42,9 @@ public class AppointmentService {
     public void notifyAppointmentUpdates(Appointment appointment) {
         simpMessagingTemplate.convertAndSend("/topic/appointments", appointment);
     }
+
+    public List<LocalDateTime> getAllAppointmentsTechnician(Date date, String name) {
+        return appointmentRepository.findAvailableAppointSlot(date, name);
+    }
+
 }

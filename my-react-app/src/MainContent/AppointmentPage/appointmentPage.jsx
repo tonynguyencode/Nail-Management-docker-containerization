@@ -82,12 +82,10 @@ function App() {
       in the API call to the Spring Boot backend.
       */}
     try {
-      
       {/* All three field data need to be filled, to be able to send request. */}
       if(formData.date && formData.time){
         const localDateTime = `${formData.date}T${formData.time}:00`; //Combine date and time into ISO 8601
 
-        
         const appointmentRegisterDto = {
           appointmentTime: localDateTime,
           status: "SCHEDULED",
@@ -112,28 +110,21 @@ function App() {
           //Log response status and message for debugging
           const errorText = await response.json();    //what if 'errorText' is an object without a 'message' property
           //Fix => fallback to plain response text
-          const errorMessage = errorText.message || JSON.stringify(errorText)
-         throw new Error(`Failed to save user: ${response.status} - ${errorText} `);
+          const errorMessage = errorText.message || JSON.stringify(errorText);
+          throw new Error(`Failed to book appointment: ${response.status} - ${errorText} `);
         } else {
           //Navigating to log in and sign in to receive the token
           setOpen(true);
           {/* Using the useEffect (React), React to changes in `open` state 
             */}
-          
-          
-          
         }
-        
       }
 
       
 
     } catch (error) {
-      
-
+    
     }
-
-
   };
 
 
@@ -183,10 +174,7 @@ function App() {
               </FormControl>
 
 
-
-              
-
-              <button className='submit-button mx-2 px-5 text-white-50 fw-bold' type='submit' 
+              <button className='button-17 mx-2 px-5 text-white-50 fw-bold' type='submit' 
               onClick={BookAppointment} >
                 Book Your Appointment
               </button>

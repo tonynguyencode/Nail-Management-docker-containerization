@@ -14,7 +14,7 @@ import { BrowserRouter, Routes, Route, Link, Navigate, useNavigate } from 'react
 import { StyledEngineProvider } from '@mui/material/styles';
 
 import DashBoardLogin from './AdminContent/LoginPage';
-
+import LoginPage from './MainContent/LoginForm/Login';
 
 import ProtectedRoute from './ProtectedRoute';
 
@@ -42,7 +42,7 @@ const App = () =>  {
               
               <Link to="/appointment" className='nav-link'><p>Appointment</p></Link>
 
-              <Link to="" className='nav-link'>
+              <Link to="/adminLogin" className='nav-link'>
                  <SupervisorAccountIcon style={{color:"white", fontSize: "36px", marginBottom: "10px"}} />
               </Link>
 
@@ -64,6 +64,7 @@ const App = () =>  {
 
           <Route path="/login" element={<DashBoardLogin /> } />
 
+          <Route path="/adminLogin" element={<LoginPage />} />
           
           <Route
             path="/profile"

@@ -17,15 +17,21 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 
 import '@fontsource/roboto/700.css';
-import {createTheme, TextField, ThemeProvider} from '@mui/material';
+import {createTheme, MenuItem, styled, TextField, ThemeProvider} from '@mui/material';
 import { useState, useEffect } from "react";
 
 import SockJS from 'sockjs-client';
 import {Client} from '@stomp/stompjs';
-//Forms: Imports
-import DateTimeContainer from './BasicDateTimePicker/DateTimePicker';
+//Forms: Imports for Find, Add, Delete and List
 
-  
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemText from "@mui/material/ListItemText";
+import {FixedSizeList} from 'react-window';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+
   function Row(props) {
     const { row } = props;
     const [open, setOpen] = React.useState(false);
@@ -125,12 +131,31 @@ import DateTimeContainer from './BasicDateTimePicker/DateTimePicker';
           },
       },
   });
+
   
 
+  const handleChange = (event) => {
+    const {name, value} = event.target;
+    setFormData( (prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
 
+  const technician_select = [
+    'Flower',
+    'Linda',
+    'John',
+  ]
 
+  
 
+  
 
+  {/* Separated Function */}
+  
+
+  
 
   
   
@@ -138,12 +163,93 @@ import DateTimeContainer from './BasicDateTimePicker/DateTimePicker';
 
     const [appointmentsByTech, setAppointmentsByTech] = useState([]);
     const [stompClient, setStompClient] = useState(null);
+    const [bookedAppointments, setBookedAppointments] = useState(new Set());
+    
+    const[formData, setFormData] = useState({
+      date: null, technician: "",
+    });
 
     const technicians = [
       {id:1, name: 'Flower'},
       {id:2, name: 'Linda'},
       {id:3, name: 'John'}
     ]
+
+    const FindAppointment = async () => {
+      const [error, setError] = useState(null);
+      const correctTime = `${formData.date}`
+      
+      
+      if(formData.date && formData.technician){
+        const extractDate = formData.date.format('YYYY-MM-DD');
+        const findAppointDto = {
+          date: extractDate,
+          name: formData.technician,
+        }
+        try {
+          const response = await fetch("http://localhost:8080/api/admin/getBookedAppointments", {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(findAppointDto),
+          });
+          if(!response.ok){
+            const errorText = await response.json();
+            const errorMessage = errorText.message || JSON.stringify(errorText);
+            throw new Error(`Failed to search the appointment: ${response.status} - ${errorText}`);
+          } else{
+            //Response Okay: parse as text to check if the body is empty
+            const text = await response.text();
+            if(!text.trim()){//Every appointments are availables.
+              setBookedAppointments(new Set());
+            } else{ //Some appointments are booked
+              const data = response.json();
+              const dateObj = data.map( dateTimeString => {
+                 const dateObj = new Date(dateTimeString);
+                 const hour = dateObj.getHours();
+                 return `${hour}:00`;
+              });
+              setBookedAppointments(new Set(dateObj));
+            }
+          }
+        } catch (error){
+          setError(error.message);
+        };
+      }; 
+    };
+
+    function renderRow(props){
+      const timeSlots = ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00'];
+      const {index, style} = props;
+      {timeSlots.map( (slot) => {
+        const isBooked = bookedAppointments.has(slot);
+        return (
+          <ListItem style={style} key={index} component="div" disablePadding >
+            <ListItemButton disabled={isBooked}>
+              <ListItemText primary={`Time: ${slot} ${isBooked ? '(Booked)' : '(Available)'}`} />
+            </ListItemButton>
+          </ListItem>
+        )
+      })}
+    };
+
+    function VirtualizedList(){
+      return (
+        <Box
+        sx={{width: '100%', height: 400, maxWidth:360, bgcolor: 'background.paper'}}
+        >
+          <FixedSizeList
+          height={400}
+          width={360}
+          itemSize={46}
+          overscanCount={5}
+          >
+          {renderRow}
+          </FixedSizeList>
+        </Box>
+      )
+    };
 
     useEffect(() => {
       async function fetchAppointments() {
@@ -172,14 +278,14 @@ import DateTimeContainer from './BasicDateTimePicker/DateTimePicker';
 
   
     useEffect( () => {
-      const socket = new SockJS('/ws');
+      const socket = new SockJS('http://localhost:8080/ws');  //CHANGE HERE FOR PRODUCTION
       const stompClient = new Client({
         webSocketFactory : () => socket,
         onConnect: () => {
-          stompClient.subscribe('http://localhost:8080/topic/appointments', (message) => {
+          stompClient.subscribe('http://localhost:8080/topic/appointments', (message) => {   //CHANGE THE URL FOR PRODUCTION
             const updatedorNewAppointment = JSON.parse(message.body);
             setAppointmentsByTech(  (prev) => {
-              const techId = updatedorNewAppointment.technician.id; //GET the ID of the new Appointment
+              const techId = updatedorNewAppointment.technician.id; 
               const techData = prev[techId];                        //Assigning the data(technician, appointments) to techData variable
               
               // Updated a specific appointment Feature
@@ -225,8 +331,7 @@ import DateTimeContainer from './BasicDateTimePicker/DateTimePicker';
     }, []);
 
 
-   
-
+    {/* Separated Function */}
     const rows = Object.values(appointmentsByTech).map( (group) => ({
         technician: group.technician,
         appointments: group.appointments,
@@ -258,7 +363,6 @@ import DateTimeContainer from './BasicDateTimePicker/DateTimePicker';
 
         {/*  
         Bottom Part: Manually add an Appointment
-        
         */}
         <Box
         component="form"
@@ -283,27 +387,48 @@ import DateTimeContainer from './BasicDateTimePicker/DateTimePicker';
             type="tel" 
           />
           
-          <DateTimeContainer />
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DateTimePicker 
+                  label="Select Date and Time"
+                  views={['year', 'month', 'day', 'hours']}
+                  name="date"
+                  value={formData.date}
+                  onChange={handleChange}
+                />
+          </LocalizationProvider>
+          
 
           <TextField
-            id="select-technician"
+            id="Select Technician"
             select
             label="Select Technician"
             helperText="Please select your currency"
+            name="technician"
+            onChange={handleChange}
+            value={formData.technician}
           >
+          {technician_select.map( (name) => (
+            <MenuItem key={name} value={name}>
+              {name}
+            </MenuItem>
+          ))}  
           </TextField>
         </Box>
 
-        {/*  THE SECOND BOX: Add Button, Delete Button, Find Button */}  
+        {/*  THE Second Box: ADD Button, DELETE Button, FIND Button */}  
         <Box
-        component="form"
+        
         sx={{ '& .MuiTextField-root': { m: 1, width: '25ch' } }}
         noValidate
         autoComplete="off"
         >
-          
-
+        <button className="button-38" onClick={FindAppointment}> Find </button>
+        <button className="button-38"> Add </button>  
+        <button className="button-38"> Delete </button>
+        {/* Lists of the Available Appointments */}  
         </Box>
+
+        <VirtualizedList />
 
       </TableContainer>
      

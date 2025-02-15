@@ -7,12 +7,17 @@ import com.nailclinic.managementnailclinic.Entities.User;
 import com.nailclinic.managementnailclinic.EntityServices.AppointmentService;
 import com.nailclinic.managementnailclinic.Repositories.UserRepository.TechnicianRepository;
 import com.nailclinic.managementnailclinic.apiDtos.AppointmentDto;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,6 +53,8 @@ public class AppointmentController {
         appointment.setTechnician(technician.get());
         return new ResponseEntity<>(appointmentService.saveAppointment(appointment), HttpStatus.OK);
     }
+
+
 
 
 
