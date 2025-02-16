@@ -40,7 +40,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests()
                 .requestMatchers("/auth/**", "/ws/**", "/api/admin/**"  ).permitAll()
                 //Define role-based access
-                .requestMatchers( "/api/appointment/**", , "/api/users/**").hasAnyRole("USER", "ADMIN")
+                .requestMatchers( "/api/appointment/**", "/api/users/**").hasAnyRole("USER", "ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement()
